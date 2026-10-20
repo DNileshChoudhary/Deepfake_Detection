@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multimodal Deepfake Detection - Workflow Diagram</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #09090b; color: #f4f4f5; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; min-height: 100vh; }
+    h1 { font-size: 24px; font-weight: 800; margin-bottom: 8px; text-align: center; background: linear-gradient(to right, #22d3ee, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    p.subtitle { color: #a1a1aa; font-size: 13px; margin-bottom: 30px; text-align: center; }
+    .container { width: 100%; max-width: 980px; display: flex; flex-direction: column; gap: 20px; }
+    
+    .card { background: #18181b; border: 1px solid #27272a; border-radius: 14px; padding: 18px 24px; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+    .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    
+    .stage-1 { border-color: #3b82f6; }
+    .stage-1 .card-title { color: #60a5fa; }
+    .stage-2 { border-color: #8b5cf6; }
+    .stage-2 .card-title { color: #a78bfa; }
+    .stage-3 { border-color: #ec4899; }
+    .stage-3 .card-title { color: #f472b6; }
+    .stage-4 { border-color: #10b981; }
+    .stage-4 .card-title { color: #34d399; }
+    
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    
+    .sub-box { background: #09090b; border: 1px solid #27272a; border-radius: 10px; padding: 14px; font-size: 12px; line-height: 1.5; }
+    .sub-box h4 { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .sub-box ul { list-style: none; color: #a1a1aa; }
+    .sub-box ul li { margin-bottom: 4px; position: relative; padding-left: 12px; }
+    .sub-box ul li::before { content: "•"; position: absolute; left: 0; color: #71717a; }
+    
+    .arrow-down { text-align: center; color: #71717a; font-size: 18px; margin: -10px 0; font-weight: bold; }
+    
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 10px; font-weight: 700; font-family: monospace; }
+    .badge-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .badge-purple { background: rgba(139, 92, 246, 0.15); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3); }
+    .badge-cyan { background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3); }
+    .badge-green { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    
+    .formula { background: #09090b; border: 1px dashed #3f3f46; border-radius: 8px; padding: 10px; text-align: center; font-family: monospace; font-size: 13px; color: #34d399; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+  <h1>Real-Time Multimodal Deepfake Detection Workflow</h1>
+  <p class="subtitle">End-to-End Pipeline: Ingestion → Feature Modeling → Cross-Modal Fusion → Explainability</p>
+
+  <div class="container">
+    
+    <!-- STAGE 1 -->
+    <div class="card stage-1">
+      <div class="card-title"><span>Stage 1</span> Input Ingestion & Decomposition</div>
+      <div class="grid-2">
+        <div class="sub-box">
+          <h4 style="color:#60a5fa;">Mode A: File Upload</h4>
+          <ul>
+            <li>MP4 / WebM / MOV / AVI Container Ingestion</li>
+            <li>Uniform Temporal Sampling (12 Frames extracted across clip)</li>
+            <li>FFmpeg Audio Demuxing to 16 kHz Mono WAV</li>
+          </ul>
+        </div>
+        <div class="sub-box">
+          <h4 style="color:#60a5fa;">Mode B: Live Webcam Stream</h4>
+          <ul>
+            <li>Browser MediaRecorder streaming 2.5s rolling chunks</li>
+            <li>6 Frames sampled per chunk for low-latency (<2s) inference</li>
+            <li>Microphone live stream audio synchronization</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-down">▼</div>
+
+    <!-- STAGE 2 -->
+    <div class="card stage-2">
+      <div class="card-title"><span>Stage 2</span> Tri-Branch Feature Modeling</div>
+      <div class="grid-3">
+        
+        <!-- Branch 1 -->
+        <div class="sub-box" style="border-top: 2px solid #818cf8;">
+          <h4 style="color:#818cf8;">1. Visual Branch (ViT)</h4>
+          <span class="badge badge-purple">Spatial Artifacts</span>
+          <ul style="margin-top:8px;">
+            <li>OpenCV Face Localization & 20% margin crop</li>
+            <li>Resized to 224x224 RGB Image Tensor</li>
+            <li>Vision Transformer (196 patch tokens self-attention)</li>
+            <li>Generates <b>Visual Authenticity Score (S_v)</b></li>
+          </ul>
+        </div>
+
+        <!-- Branch 2 -->
+        <div class="sub-box" style="border-top: 2px solid #22d3ee;">
+          <h4 style="color:#22d3ee;">2. Audio Branch (Wav2Vec2)</h4>
+          <span class="badge badge-cyan">Acoustic Artifacts</span>
+          <ul style="margin-top:8px;">
+            <li>Wav2Vec2 Speech Transformer inference</li>
+            <li>Librosa 13 MFCCs & Pitch (F0) extraction</li>
+            <li>Spectral Flatness (vocoder noise check)</li>
+            <li>Generates <b>Audio Authenticity Score (S_a)</b></li>
+          </ul>
+        </div>
+
+        <!-- Branch 3 -->
+        <div class="sub-box" style="border-top: 2px solid #ec4899;">
+          <h4 style="color:#ec4899;">3. Lip-Sync Branch</h4>
+          <span class="badge badge-blue">Cross-Modal Coherence</span>
+          <ul style="margin-top:8px;">
+            <li>MediaPipe 478 3D Mesh (jawOpen blendshape)</li>
+            <li>Audio RMS Speech Energy Envelope extraction</li>
+            <li>Pearson Cross-Correlation (r) calculation</li>
+            <li>Generates <b>Lip-Sync Score (S_s)</b></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="arrow-down">▼</div>
+
+    <!-- STAGE 3 -->
+    <div class="card stage-3">
+      <div class="card-title"><span>Stage 3</span> Multimodal Fusion & Attribution</div>
+      <div class="sub-box">
+        <p style="color:#d4d4d8; font-size:12px;">Dynamic Calibrated Decision Fusion combines scores while accounting for missing modalities (e.g. silent video):</p>
+        <div class="formula">
+          S_authenticity = (0.45 × S_visual) + (0.35 × S_audio) + (0.20 × S_sync)
+        </div>
+        <div style="display:flex; justify-content:space-around; margin-top:12px; font-size:11px; color:#a1a1aa;">
+          <span>• If S_auth ≤ 0.42 → <b>Likely Manipulated</b></span>
+          <span>• If S_auth ≥ 0.60 → <b>Likely Real</b></span>
+          <span>• Identifies Dominant Factor (Visual, Audio, or Desync)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-down">▼</div>
+
+    <!-- STAGE 4 -->
+    <div class="card stage-4">
+      <div class="card-title"><span>Stage 4</span> Explainability & UI Presentation</div>
+      <div class="grid-2">
+        <div class="sub-box">
+          <h4 style="color:#34d399;">Visual Explainability (Grad-CAM)</h4>
+          <p style="color:#a1a1aa; font-size:11px; margin-top:4px;">
+            PyTorch backward hooks at <code>vit.layernorm</code> compute patch gradient weights, rendering a thermal Jet colormap directly over facial manipulation regions.
+          </p>
+        </div>
+        <div class="sub-box">
+          <h4 style="color:#34d399;">Lip-Sync Temporal Waveform</h4>
+          <p style="color:#a1a1aa; font-size:11px; margin-top:4px;">
+            Interactive SVG chart visualizing Mouth Aperture curve vs Speech RMS Energy curve over time, graphically displaying viseme-phoneme sync or divergence.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
